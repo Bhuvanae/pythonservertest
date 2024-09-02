@@ -74,7 +74,7 @@ async def create_pool_connection():
         logger.error("AZURE_POSTGRESQL_CONNECTIONSTRING is not set")
         raise ValueError("AZURE_POSTGRESQL_CONNECTIONSTRING environment variable is not set.")
     logger.info(f"DB URI: {db_uri}")
-    return await asyncpg.create_pool(db_uri)
+    return await asyncpg.create_pool(dsn=db_uri, ssl="require")  # Ensure SSL is required
 
 async def getUsersDetails(pool):
     try:
@@ -84,6 +84,7 @@ async def getUsersDetails(pool):
     except asyncpg.PostgresError as e:
         logger.error(f"Database error: {e}")
         raise HTTPException(status_code=500, detail="Database error")
+
 
 
 
